@@ -1,0 +1,144 @@
+package mainPackage;
+
+import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.io.FileNotFoundException;
+import java.io.File;
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		/**
+		 * Name of the file inputted by user
+		 */
+		String filename;
+		
+		/**
+		 * The actual file this program will be reading from
+		 */
+		File file;
+		
+		/**
+		 * The queue used in this program
+		 */
+		QueueClass queue = new QueueClass();
+		
+		/**
+		 * The stack used in this program
+		 */
+		StackClass stack = new StackClass();
+		
+		/**
+		 * The Scanner that scans through the file
+		 */
+		String	scan;
+		
+		/**
+		 * A boolean variable detailing if the current string is a palindrome
+		 */
+		boolean isPalindrome = true;
+		
+		/**
+		 * A character array used to break up the token into it's characters
+		 */
+		char	character[] = new char[500];
+		
+		/**
+		 * A counter used to traverse the character array
+		 */
+		int		counter = 0;
+		
+		System.out.println("Program Running....");
+		
+		do {	//Endless loop. The exit is done by a break command at the bottom of this loop
+		
+			System.out.print("\nPlease enter the name of the text file or 'end' to exit: ");
+			Scanner name = new Scanner(System.in);	//Create a scanner object to take in the name of the file
+			filename = name.nextLine();	//Get the string rep. of the filename
+			file = new File(filename);
+			
+			if (!filename.toLowerCase().equals("end")) {
+				try {	//Try block in case the user made a mistake typing in the filename
+					Scanner contents = new Scanner(file);	//If the user inputted it correctly, scann through it
+					
+					while (contents.hasNextLine()) {
+						scan = contents.nextLine();	//Scan is now the string rep. of the current line in the file
+						StringTokenizer t = new StringTokenizer(scan);	//Tokenize it!
+						
+						while (t.hasMoreElements()) {
+							String s = t.nextToken();
+							s = s.toLowerCase();	//Convert everything in the string to lower case for comparison
+													//reasons
+						
+							for (int i = 0; i < s.length(); i++) {
+								character = s.toCharArray();	//Take the string and break it up in to its
+																//character. Store them in the array
+								
+								if (Character.isLetter(character[counter])) { //If the character is a letter:
+									queue.add(character[counter]);	//Add it to the queue and
+									stack.push(character[counter]);	//Push it onto the queue
+								}
+								counter++;	//After every letter, increment the counter to access the next
+											//character in the array
+							}	
+							counter = 0;	//Reset the counter so that we start at the beginning of the array again
+						}
+						
+						
+						while (!stack.isEmpty()) {	//The stack and queue should have the same amount of stuff in them
+							char c, d;	//This was done for debugging purposes
+							
+							try {
+								c = queue.remove().letter;
+								d = stack.pop().letter;
+		
+								if (d != c) 
+									isPalindrome = false;	//As soon as a letter doesn't match, it's not a palindrome
+							}
+								
+							
+							catch (StackEmptyException e) {	//For error catching --> Should not happen
+								System.err.println(e.getMessage());
+								break;
+							}
+							
+							catch (EmptyQueueException q) {	//For error catching --> Should not happen
+								System.err.println(q.getMessage());
+								break;
+							}//Inner While
+						}//Inner While
+						
+						if (isPalindrome) {
+							System.out.println(scan + " is a palindrome");
+						}
+						
+						isPalindrome = true;
+					}//Outer While
+					
+				}
+				
+				catch (FileNotFoundException e) {
+					System.err.println(e.getMessage());
+				}
+			}
+			
+			else
+				break;
+			
+		}while(true);	//Repeats until the user enters 'end'. Then the program breaks from the while loop
+		
+		finishUp();	//Queue is ready, continue with notification messages
+
+	}
+
+	public void finishUp() {
+		System.out.println("Everything went according to plan. All your base are belong to us");
+		System.out.println("Thank you -- goodbye");
+	}
+
+
+
+}

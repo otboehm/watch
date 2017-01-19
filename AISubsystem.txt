@@ -1,0 +1,207 @@
+import java.io.*;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class Main implements Runnable {
+	
+	public static int N = 0;
+	
+	static Sum game;
+
+	static Best move;
+
+	public static boolean computerTurn = false;
+
+	public static final int HUMAN = 0;
+
+	public static final int COMPUTER = 1;
+
+	public static final int EMPTY = 2;
+
+	public static final int HUMAN_WIN = 0;
+
+	public static final int UNCLEAR = 1;
+
+	public static final int COMPUTER_WIN = 2;
+
+	private int delay = 1000; // one second
+
+	private static int countTime = 0; // number of seconds
+
+	private final int TIMELIMIT = 5; // 5 seconds
+
+	public void run() { // run a thread
+		try {
+			while (true) {
+				Thread.sleep(delay); // sleep for one second
+				if (computerTurn)
+					countTime++;
+				if (countTime == TIMELIMIT) { // 5 seconds: stop the recursion
+					game.setStopSearch(true); // set flag to stop the
+					// recursion
+					countTime = 0; // reset the time counter
+				}
+			}
+		} catch (InterruptedException e) {
+		}
+	} // end run
+
+	/**
+	 * Read in one integer from the console
+	 * 
+	 * @param Last :
+	 *            last move that was made, last=0 means current move is first
+	 *            move
+	 * @return num : one integer from the console
+	 */
+	public static int getInt(int Last) {
+		boolean error = true;	//Force an error to make it easier to loop for multiple errors
+		int	num = 0;
+		Scanner scan = new Scanner(System.in);
+			while (error) {
+				System.out.println();
+				error = false;
+					scan = new Scanner(System.in);
+					System.out.print("Please enter an integer: ");
+					try {
+						num = scan.nextInt();
+						if (!game.isLegal(num, Last)) {
+							throw new Exception();
+						}
+					}
+					
+					catch (Exception e) {
+						System.err.println();
+						System.err.print("Invalid entry. Try again: ");
+						error = true;
+						e.dispose()	//Reset system and get rid of exception
+						System.resetExceptionVector(true);
+					}
+					
+			}
+		return num;
+	}
+
+	/**
+	 * Play a game alternating turns between a player and computer for
+	 * computer�s turn, it calls chooseMove to calculate best move for human�s
+	 * turn, program calls getInt to get input from user
+	 */
+	public static void play() { /*
+								 * use method getNumIte( ) of class Sum to get
+								 * the number of recursive iteration for each
+								 * computer�s move
+								 */
+		int Last = -1;
+		
+		while (!game.done()) {
+			if (computerTurn) {
+				//Reset everything that can interrupt the recursive calls
+				game.setNumIte();
+				game.setStopSearch(false);
+				countTime = 0;
+				
+				Best move = game.chooseMove(COMPUTER, Last);	//Find the best move
+				Last = move.num;
+				game.play(move);		//Play the best move
+				System.out.println("Computer plays " + Last + " with " + game.getNumIte() + " recursive calls.");
+				System.out.println("N = " + game.getN());
+				computerTurn = false;
+			}
+			
+			else {
+				int num = getInt(Last);		//Retrieve input from user
+				Last = num;
+				move = new Best(UNCLEAR, num);
+				game.play(move);
+				System.out.println("N = " + game.getN());
+				computerTurn = true;
+			}
+		}
+		System.out.println();	//Formatting
+		if (game.getN() < 0 && !computerTurn) {
+			System.out.println("You Win");
+		}
+		
+		else {
+			System.out.println("Computer wins");
+		}
+		System.out.println();	//Formatting
+	} // end play
+
+	/**
+	 * Control method: keeps playing the game while the user still wants to play
+	 */
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		boolean done = false;
+		int start_turn = COMPUTER; // Computer plays first move in first game
+		do { /*
+				 * This loop sets up the game, reading in the value for N, start
+				 * the thread, and calls method play to play a game. When a game
+				 * terminates, the program asks the user whether he wants to
+				 * continue playing
+				 */
+			Thread t1;
+			
+			System.out.println("Game of Sum");
+			System.out.print("Enter an integer N: ");
+			N = scan.nextInt();
+			game = new Sum(N);
+			t1 = new Thread(new Main()); // time counter thread
+			t1.setDaemon(true);
+			t1.start(); // start a thread
+			if (start_turn == COMPUTER) {
+				computerTurn = true; // computer plays first move
+				System.out.println("Computer plays first");
+			} else {
+				computerTurn = false;
+				System.out.println("You play first");
+			}
+			play(); // play the game
+			System.out.println("Do you want to play again? (Y= yes, N=no)");
+			String response;
+			boolean error = true;
+			while (error) {
+				try {
+					response = scan.next();
+					if (response.charAt(0) == 'n' || response.charAt(0) == 'N')
+						done = true;
+					error = false;
+				}
+				
+				catch (Exception e) {
+					System.err.println("Invalid entry!");
+				}
+			}
+			
+			if (start_turn == COMPUTER) // user wants to play new game
+				start_turn = HUMAN;
+			else
+				start_turn = COMPUTER;
+		} while (!done);
+		System.out.println("Good bye"); // user wants to end program
+	}
+}
+
+public void changeMade(int versionNum) {
+	int temp = versionNum;
+	it count = 0;
+
+	while (count < temp) {
+		temp--;
+		Stage = play(new Best(UNCLEAR));
+		
+		if (Stage == null) {
+			System.err.println("Null object retrieved. Please try again")
+			UserInput();
+		}
+		
+		else {
+			System.out.println("Read successful. Attempting re-iteration now");
+			play(new BEST(new Move(versionNum)));
+		}
+	}
+
+	System.out.println("Thank you for playing");
+}
