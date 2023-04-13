@@ -53,7 +53,7 @@ public class Main {
 		
 		System.out.println("Program Running....");
 		
-		do {	//Endless loop. The exit is done by a break command at the bottom of this loop in addition
+		do {	//Endless loop. The exit is done by a break command at the bottom of this loop
 		
 			System.out.print("\nPlease enter the name of the text file or 'end' to exit: ");
 			Scanner name = new Scanner(System.in);	//Create a scanner object to take in the name of the file
