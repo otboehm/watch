@@ -20,6 +20,10 @@ sdf
 
 	public static final int COMPUTER = 1;
 
+sdf
+gdsfg
+sdfg
+df
 	public static final int EMPTY = 2;
 
 	public static final int HUMAN_WIN = 0;
