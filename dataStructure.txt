@@ -17,7 +17,7 @@ public class Main {
 		String filename;
 		
 		/**
-		 * The actual file this program will be reading from
+		 * The  from
 		 */
 		File file;
 		

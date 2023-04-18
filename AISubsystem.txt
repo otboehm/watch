@@ -55,7 +55,7 @@ public class Main implements Runnable {
 	 * @return num : one integer from the console
 	 */
 	public static int getInt(int Last) {
-		boolean error = true;	//Force an error to make it easier to loop for multiple errors
+		boolean error = true;	//Force an error to make it easier
 		int	num = 0;
 		Scanner scan = new Scanner(System.in);
 			while (error) {
