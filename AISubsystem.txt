@@ -8,10 +8,6 @@ public class Main implements Runnable {
 	
 	static Sum game;
 
-
-sdf
-sdf
-
 	static Best move;
 
 	public static boolean computerTurn = false;
@@ -20,10 +16,7 @@ sdf
 
 	public static final int COMPUTER = 1;
 
-sdf
-gdsfg
-sdfg
-df
+
 	public static final int EMPTY = 2;
 
 	public static final int HUMAN_WIN = 0;
